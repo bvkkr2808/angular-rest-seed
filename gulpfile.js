@@ -124,9 +124,9 @@ gulp.task('test-once', function(done) {
             configFile: 'karma.conf.js',
             action: 'run'
         }))
-        .on("error", notify.onError(function (error) {
-            return "Test failed: " + error.message;
-        }))
+        .on("error", function(error){
+            throw error;
+        });
 });
 
 gulp.task('e2e-test', [], function() {
@@ -157,7 +157,7 @@ gulp.task('app-prod', function () {
 });
 
 gulp.task('build-dev', ['clean'], function () {
-    return gulp.start('libs', 'app', 'images', 'styles', 'html', 'fonts', 'test-once');
+    return gulp.start('libs', 'app', 'images', 'styles', 'html', 'fonts');
 });
 
 gulp.task('build-prod', ['build-dev'], function () {
@@ -169,8 +169,6 @@ gulp.task('watch', ['lint', 'build-dev'], function () {
     gulp.watch(paths.html, ['html']);
 
     gulp.watch(paths.styles, ['styles']);
-
-    gulp.watch(paths.tests, ['test-once']);
 
     gulp.watch(paths.js, ['lint', 'app']);
 
@@ -195,5 +193,5 @@ gulp.task('server', function () {
 });
 
 gulp.task('default', function () {
-    gulp.start('watch', 'server');
+    gulp.start('watch', 'server', 'test');
 });
