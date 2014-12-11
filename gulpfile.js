@@ -12,22 +12,25 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     streamify = require('gulp-streamify'),
     uglify = require('gulp-uglify'),
-    sass = require('gulp-sass')
-    ;
-
+    sass = require('gulp-sass'),
+    karma = require('gulp-karma'),
+    template = require('gulp-template'),
+    protractor = require('gulp-protractor').protractor;
 
 
 
 var paths = {
-    libs_js: ['bower_components/angular/angular.js',
+    libs: ['bower_components/angular/angular.js',
         'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
         'bower_components/angular-resource/angular-resource.js',
         'bower_components/angular-route/angular-route.js'
     ],
+    test_libs: ['bower_components/angular-mocks/angular-mocks.js'],
     prod_out: 'resources/public/app',
     dev_out: 'dist/dev/app',
-    js: ['./gui/**/*.js', '!./gui/**/*.spec.js'],
-    tests: ['./gui/**/*.spec.js'],
+    js: ['./gui/**/*.js', '!./gui/**/*.spec.js', '!./gui/**/*.e2e.js'],
+    tests: ['./gui/**/*.js', '!./gui/**/*.e2e.js'],
+    e2etests: ['./gui/**/*.e2e.js'],
     styles: ['./gui/styles/main.scss'],
     images: ['./gui/images/**/*'],
     html: ['./gui/**/*.html'],
@@ -85,31 +88,55 @@ gulp.task('styles', function () {
 });
 
 gulp.task('libs', function () {
-    return gulp.src(paths.libs_js)
+    return gulp.src(paths.libs)
         .pipe(concat('libs.js'))
         .pipe(gulp.dest(paths.dev_out + '/js'))
         .pipe(connect.reload())
 });
 
 gulp.task('libs-prod', function () {
-    return gulp.src(paths.libs_js)
+    return gulp.src(paths.libs)
         .pipe(concat('libs.js'))
         .pipe(streamify(uglify()))
         .pipe(gulp.dest(paths.prod_out + '/js'))
         .pipe(connect.reload())
 });
 
-gulp.task('test', function() {
-    // Be sure to return the stream
-    return gulp.src(paths.tests)
+
+gulp.task('test', function(done) {
+    var files = paths.libs.concat(paths.test_libs).concat(paths.tests);
+    return gulp.src(files)
+        .pipe(karma({
+            configFile: 'karma.conf.js',
+            action: 'watch'
+        }))
+        .on("error", function(error){
+            throw error;
+        });
+
+});
+
+gulp.task('test-once', function(done) {
+    var files = paths.libs.concat(paths.test_libs).concat(paths.tests);
+
+    return gulp.src(files)
         .pipe(karma({
             configFile: 'karma.conf.js',
             action: 'run'
         }))
-        .on('error', function(err) {
-            // Make sure failed tests cause gulp to exit non-zero
-            throw err;
-        });
+        .on("error", notify.onError(function (error) {
+            return "Test failed: " + error.message;
+        }))
+});
+
+gulp.task('e2e-test', [], function() {
+    gulp.src(paths.e2etests)
+        .pipe(protractor({
+            configFile: "protractor.conf.js",
+            args: ['--baseUrl', 'http://127.0.0.1:7890']
+        }))
+        .on('error', function(e) { throw e });
+
 });
 
 gulp.task('app', function () {
@@ -130,7 +157,7 @@ gulp.task('app-prod', function () {
 });
 
 gulp.task('build-dev', ['clean'], function () {
-    return gulp.start('libs', 'app', 'images', 'styles', 'html', 'fonts');
+    return gulp.start('libs', 'app', 'images', 'styles', 'html', 'fonts', 'test-once');
 });
 
 gulp.task('build-prod', ['build-dev'], function () {
@@ -143,7 +170,9 @@ gulp.task('watch', ['lint', 'build-dev'], function () {
 
     gulp.watch(paths.styles, ['styles']);
 
-    gulp.watch(paths.js, ['lint', 'test', 'app']);
+    gulp.watch(paths.tests, ['test-once']);
+
+    gulp.watch(paths.js, ['lint', 'app']);
 
 });
 

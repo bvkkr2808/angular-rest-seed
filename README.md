@@ -2,17 +2,21 @@
 
 FIXME
 
-## Prerequisites
+## GUI
 
-You will need [Leiningen][] 2.0.0 or above installed.
+npm install -g protractor karma
+webdriver-manager update
 
-[leiningen]: https://github.com/technomancy/leiningen
 
-## Running
+## Running for development
 
-To start a web server for the application, run:
+To start a backend web server for the application, run:
 
     lein ring server
+    
+To start a GUI server for development
+    
+    gulp
 
 ## License
 
