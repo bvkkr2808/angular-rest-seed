@@ -41,14 +41,10 @@ gulp.task('clean', function (cb) {
     del(['dist/*'], cb)
 });
 
-gulp.task('lint', function () {
-    return gulp.src(paths.js)
-        .pipe(jshint())
-        // You can look into pretty reporters as well, but that's another story
-        .pipe(jshint.reporter('default'))
-        .on("error", notify.onError(function (error) {
-            return "Lint: JS problem: " + error.message;
-        }));
+gulp.task('fonts', function () {
+    return gulp.src(paths.fonts)
+        .pipe(gulp.dest(paths.dev_out + '/fonts'))
+        .pipe(gulp.dest(paths.prod_out + '/fonts'));
 });
 
 gulp.task('html', function () {
@@ -56,12 +52,6 @@ gulp.task('html', function () {
         .pipe(gulp.dest(paths.dev_out))
         .pipe(connect.reload())
         .pipe(gulp.dest(paths.prod_out));
-});
-
-gulp.task('fonts', function () {
-    return gulp.src(paths.fonts)
-        .pipe(gulp.dest(paths.dev_out + '/fonts'))
-        .pipe(gulp.dest(paths.prod_out + '/fonts'));
 });
 
 gulp.task('images', function () {
@@ -91,17 +81,24 @@ gulp.task('libs', function () {
     return gulp.src(paths.libs)
         .pipe(concat('libs.js'))
         .pipe(gulp.dest(paths.dev_out + '/js'))
-        .pipe(connect.reload())
+        .pipe(connect.reload());
 });
 
 gulp.task('libs-prod', function () {
     return gulp.src(paths.libs)
         .pipe(concat('libs.js'))
         .pipe(streamify(uglify()))
-        .pipe(gulp.dest(paths.prod_out + '/js'))
-        .pipe(connect.reload())
+        .pipe(gulp.dest(paths.prod_out + '/js'));
 });
 
+gulp.task('lint', function () {
+    return gulp.src(paths.js)
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'))
+        .on("error", notify.onError(function (error) {
+            return "Lint: JS problem: " + error.message;
+        }));
+});
 
 gulp.task('test', function(done) {
     var files = paths.libs.concat(paths.test_libs).concat(paths.tests);

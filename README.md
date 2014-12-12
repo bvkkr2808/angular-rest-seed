@@ -4,6 +4,7 @@ A template for AngularJS development with backend REST services in Java, Clojure
 
 - Module based structure for GUI
 - Gulp taskrunner
+- Webserver with live reload for GUI and proxy to backend REST services
 - Karma and Jasmin for unit tests
 - Protractor for end to end browser tests
 - Saas stylesheet with bootstrap and font awesome
@@ -17,7 +18,21 @@ A template for AngularJS development with backend REST services in Java, Clojure
     npm install
     bower install
 
+## Run
 
+For development
+
+    gulp
+    
+For end to end tests
+    
+    webdriver-manager start
+    gulp e2e-test
+    
+Build for production
+    
+    gulp build-prod
+    
 ## Integrate with Java backend
 
 Create a Java project. 
@@ -31,8 +46,11 @@ If you want to package the Java project with the Angular compiled output, you ne
 
 To start a backend web server for the application, run:
 
+    lein new compojure --to-dir .
+    // or if you prefer the backend to be in a subdirectory: lein new compojure my-backend-name
     echo "resources/public/app/" >> .gitignore
     
+Update the value of paths.prod_out in the *gulpfile*. It should point to *resources/public/app*    
     
 To start the GUI and the backend server for development
     
