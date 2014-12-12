@@ -2,19 +2,11 @@
 (function(){
     "use strict";
 
-    var myApp = angular.module('myBaseApp', ['ngRoute', 'myBaseApp.home']);
+    var myApp = angular.module('myBaseApp', ['ui.router', 'myBaseApp.home']);
 
     myApp
-        .config(function ($routeProvider) {
-            $routeProvider.when(
-                "/home", {
-                    templateUrl: "modules/home/home.html",
-                    controller: "HomeCtrl"
-                }
-            ).otherwise({
-                    redirectTo: "/home"
-                }
-            );
+        .config(function ($urlRouterProvider) {
+            $urlRouterProvider.otherwise("/home");
         });
 })();
 

@@ -4,7 +4,7 @@
   "authors": [
     "Sebastian Hennebrueder <usenet@laliluna.de>"
   ],
-  "license": "MIT",
+  "license": "Apache License",
   "homepage": "http://www.laliluna.de",
   "private": true,
   "ignore": [
@@ -17,10 +17,10 @@
   "dependencies": {
     "angular": "~1.3",
     "angular-bootstrap": "~0.12",
-    "angular-route": "~1.3",
     "bootstrap-sass-official": "~3.3.1",
     "angular-resource": "~1.3",
     "angular-mocks": "~1.3.6",
-    "font-awesome": "~4.2.0"
+    "font-awesome": "~4.2.0",
+    "angular-ui-router": "~0.2.13"
   }
 }

@@ -23,10 +23,10 @@ var paths = {
     libs: ['bower_components/angular/angular.js',
         'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
         'bower_components/angular-resource/angular-resource.js',
-        'bower_components/angular-route/angular-route.js'
+        'bower_components/angular-ui-router/release/angular-ui-router.js'
     ],
     test_libs: ['bower_components/angular-mocks/angular-mocks.js'],
-    prod_out: 'resources/public/app',
+    prod_out: 'dist/prod/app',
     dev_out: 'dist/dev/app',
     js: ['./gui/**/*.js', '!./gui/**/*.spec.js', '!./gui/**/*.e2e.js'],
     tests: ['./gui/**/*.js', '!./gui/**/*.e2e.js'],
@@ -142,6 +142,9 @@ gulp.task('e2e-test', [], function() {
 gulp.task('app', function () {
     return gulp.src(paths.js)
         .pipe(ngAnnotate())
+        .on("error", notify.onError(function (error) {
+            return "JS problem: " + error.message;
+        }))
         .pipe(concat('app.js'))
         .pipe(gulp.dest(paths.dev_out + '/js'))
         .pipe(connect.reload())
