@@ -1,4 +1,4 @@
-# base
+# Introduction
 
 A template for AngularJS development with backend REST services in Java, Clojure or ....
 
