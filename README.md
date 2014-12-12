@@ -1,6 +1,8 @@
 # Introduction
 
-A template for AngularJS development with backend REST services in Java, Clojure or ....
+A template for AngularJS development **made in Frankfurt Germany**. It is ready to be used with backend REST services in Java, Clojure or ....
+
+
 
 - Module based structure for GUI
 - Gulp taskrunner
@@ -59,4 +61,4 @@ To start the GUI and the backend server for development
 
 ## License
 
-Created by Sebastian Hennebr&uuml;der "http://www.laliluna.de":[http://www.laliluna.de] Frankfurt (Germany) under Apache License
+Created by Sebastian Hennebr&uuml;der [http://www.laliluna.de](http://www.laliluna.de) Frankfurt (Germany) under Apache License
