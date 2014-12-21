@@ -170,7 +170,10 @@ gulp.task('watch', ['lint', 'build-dev'], function () {
 
     gulp.watch(paths.styles, ['styles']);
 
-    gulp.watch(paths.js, ['lint', 'app']);
+    gulp.watch(paths.js, function(){
+        gulp.start('lint');
+        gulp.start('app');
+    });
 
 });
 
